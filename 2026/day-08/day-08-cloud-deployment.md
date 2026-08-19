@@ -10,8 +10,8 @@ Today's task focused on launching an AWS EC2 instance, establishing remote SSH c
 ### 1. Cloud Instance Access & System Setup
 Establish secure remote connection using SSH:
 ```bash
-chmod 400 devopsrashid.pem
-ssh -i devopsrashid.pem ubuntu@<YOUR_EC2_PUBLIC_IP>
+chmod 400 devops.pem
+ssh -i devops.pem ubuntu@<YOUR_EC2_PUBLIC_IP>
 ```
 <img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/a2a61837-c24c-48c1-8980-9ddd1fb11a4d" />
 
