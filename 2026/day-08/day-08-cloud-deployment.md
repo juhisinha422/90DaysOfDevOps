@@ -13,7 +13,8 @@ Establish secure remote connection using SSH:
 chmod 400 devopsrashid.pem
 ssh -i devopsrashid.pem ubuntu@<YOUR_EC2_PUBLIC_IP>
 ```
-![SSH Connection Terminal](ssh-connection.png)
+<img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/a2a61837-c24c-48c1-8980-9ddd1fb11a4d" />
+
 
 Update system package indexes:
 ```bash
@@ -39,17 +40,19 @@ Verify active container status:
 ```bash
 sudo docker ps
 ```
-![Docker Nginx Container Running](docker-nginx.png)
+<img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/b2b8e77a-76a6-43ba-932d-29df4fb4ee97" />
+
 
 ### 3. Inbound Web Verification
 Configured AWS Security Group inbound rules for HTTP (Port 80). Verified web accessibility via browser:
-![Nginx Welcome Webpage](nginx-webpage.png)
+<img width="2940" height="1912" alt="image" src="https://github.com/user-attachments/assets/9e0fc581-09fc-416b-a6ca-03dae898f405" />
+
 
 ### 4. Log Extraction & Local SCP Transfer
 Export active access logs and transfer to local machine for audit:
 ```bash
 sudo tail -n 50 /var/log/nginx/access.log > ~/nginx-logs.txt
-scp -i ~/Downloads/devopsrashid.pem ubuntu@<YOUR_EC2_PUBLIC_IP>:~/nginx-logs.txt ~/Downloads/
+scp -i ~/Downloads/devops.pem ubuntu@<YOUR_EC2_PUBLIC_IP>:~/nginx-logs.txt ~/Downloads/
 ```
 
 ## Challenges Faced & Solutions
