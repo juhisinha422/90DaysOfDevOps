@@ -29,7 +29,7 @@ If I remove the shebang, the script will execute using my current default shell.
 **Code (variables.sh):**
 ```bash
 #!/bin/bash
-NAME="Rashid"
+NAME="Juhi"
 ROLE="DevOps Engineer"
 
 echo "--- Double Quotes Test ---"
