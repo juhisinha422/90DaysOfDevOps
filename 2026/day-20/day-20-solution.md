@@ -67,7 +67,7 @@ if [ ! -f "$LOG_FILE" ]; then
 fi
 ```
 **Output Proof:**
-![Task 1 Validation](./task-1-validation.png)
+<img width="2890" height="786" alt="Image" src="https://github.com/user-attachments/assets/c3ba832e-34e0-4e26-a259-d463766e2b5c" />
 
 
 ### Task 2: Error Count
@@ -79,8 +79,7 @@ ERROR_COUNT=$(grep -E -c "ERROR|Failed" "$LOG_FILE")
 echo "Total error count: $ERROR_COUNT"
 ```
 **Output Proof:**
-![Task 2 Error Count](./task-2-error-count.png)
-
+<img width="2744" height="160" alt="Image" src="https://github.com/user-attachments/assets/5853c15f-66dc-4f12-b00a-3893668949e8" />
 
 ### Task 3: Critical Events
 **Goal:** Search for lines containing the keyword CRITICAL and print those lines along with their exact line number.
@@ -91,8 +90,7 @@ echo "--- Critical Events ---"
 grep -n "CRITICAL" "$LOG_FILE" | sed 's/^\([0-9]*\):/Line \1: /'
 ```
 **Output Proof:**
-![Task 3 Critical Events](./task-3-critical-events.png)
-
+<img width="2758" height="940" alt="Image" src="https://github.com/user-attachments/assets/976fac55-2485-4e08-8ef6-a3cc13eeb09f" />
 
 ### Task 4: Top 5 Error Messages
 **Goal:** Extract all lines containing ERROR, clean the text, identify the top 5 most common error messages, and display them with their occurrence count in descending order.
@@ -103,8 +101,7 @@ echo "--- Top 5 Error Messages ---"
 grep "ERROR" "$LOG_FILE" | awk '{$1=$2=$3=""; print}' | sed 's/ - [0-9]*$//' | sort | uniq -c | sort -rn | head -5
 ```
 **Output Proof:**
-![Task 4 Top Errors](./task-4-top-errors.png)
-
+<img width="960" height="386" alt="Image" src="https://github.com/user-attachments/assets/ac3b5bfc-3430-4641-b96c-537e936b8320" />
 
 ### Task 5: Summary Report
 **Goal:** Generate a summary report to a text file containing all the analyzed data points using simultaneous console and file output.
@@ -123,8 +120,7 @@ TOTAL_LINES=$(wc -l < "$LOG_FILE")
 } | tee "$REPORT_FILE"
 ```
 **Output Proof:**
-![Task 5 Summary Report](./task-5-summary-report.png)
-
+<img width="2126" height="222" alt="Image" src="https://github.com/user-attachments/assets/0b52f6ba-b453-414b-a36c-cd6997942132" />
 
 ### Task 6 (Optional): Archive Processed Logs
 **Goal:** Automatically create an archive folder and move the processed log file into it after successful analysis to keep the workspace clean.
@@ -137,7 +133,7 @@ mv "$LOG_FILE" "$ARCHIVE_DIR/"
 echo "Success: Processed log file '$LOG_FILE' moved to '$ARCHIVE_DIR/' directory."
 ```
 **Output Proof:**
-![Task 6 Archive](./task-6-archive.png)
+<img width="1940" height="300" alt="Image" src="https://github.com/user-attachments/assets/50a3422b-18ae-40d7-afba-2410f61a64af" />
 
 ---
 
