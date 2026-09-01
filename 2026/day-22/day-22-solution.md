@@ -34,7 +34,7 @@ git commit -m "docs: add git log command for commit history"
 ```
 
 **Proof of Execution (Git Log):**
-![Git Log Output](./task-5-git-log.png)
+<img width="1754" height="236" alt="Image" src="https://github.com/user-attachments/assets/266f9a88-1a7f-49ca-95c0-93fdf9a1cedb" />
 
 ---
 
