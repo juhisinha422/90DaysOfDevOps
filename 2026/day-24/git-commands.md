@@ -1,8 +1,8 @@
 # Git Commands Reference
 
 ## Setup & Config
-* `git config --global user.name "rashid-khan681"` - Sets author name.
-* `git config --global user.email "rk8539100@gmail.com"` - Sets author email.
+* `git config --global user.name "juhisinha422"` - Sets author name.
+* `git config --global user.email "juhisinha422@gmail.com"` - Sets author email.
 * `git init` - Initializes a new Git repository.
 
 ## Basic Workflow
