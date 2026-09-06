@@ -1,6 +1,6 @@
 # Day 28: Milestone Revision & Honest Self-Audit (Days 1–27)
 
-**Author:** Rashid Khan  
+**Author:** Juhi Sinha
 **Track:** #90DaysOfDevOps (2026)  
 **Milestone:** Systems Engineering, Automation & Version Control Consolidation  
 
