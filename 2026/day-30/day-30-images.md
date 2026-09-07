@@ -39,4 +39,4 @@ Today, I deep-dived into the core of how Docker images are built, how they share
 - Nuked all unused layers, caches, and images: `docker system prune -a --volumes`
 **Result:** Successfully reclaimed 139.2MB of disk space.
 
-![Task 5 - Docker System Cleanup](./05-docker-system-cleanup.png)
+<img width="1926" height="1534" alt="Image" src="https://github.com/user-attachments/assets/d180b9c7-ed95-49bf-b259-3e718533b394" />
