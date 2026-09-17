@@ -18,7 +18,7 @@ I have marked this honestly based on my actual hands-on execution from Day 29 to
 - [x] Push an image to Docker Hub
 - [x] Use healthchecks and depends_on
 
-*Self-Check Verdict:* **100% Confident**. (I executed all of these end-to-end while deploying the Nexus Prime dashboard).
+*Self-Check Verdict:* **100% Confident**.
 
 ## 2. Quick-Fire Questions (From Real Experience)
 
