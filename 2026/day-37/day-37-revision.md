@@ -1,340 +1,67 @@
-#  Day 37 – Docker Revision & Cheat Sheet
+# Day 37: Docker Revision & Self-Assessment
 
-##  Self-Assessment Checklist
-
-Mark yourself honestly — **can do**, **shaky**, or **haven't done**.
-
-## ✅ Docker Skills Checklist
+## 1. Self-Assessment Checklist
+I have marked this honestly based on my actual hands-on execution from Day 29 to Day 36 on my AWS EC2 instance:
 
 - [x] Run a container from Docker Hub (interactive + detached)
 - [x] List, stop, remove containers and images
 - [x] Explain image layers and how caching works
-- [x] Write a Dockerfile from scratch with `FROM`, `RUN`, `COPY`, `WORKDIR`, `CMD`
-- [ ] Explain `CMD` vs `ENTRYPOINT`
+- [x] Write a Dockerfile from scratch with FROM, RUN, COPY, WORKDIR, CMD
+- [x] Explain CMD vs ENTRYPOINT
 - [x] Build and tag a custom image
 - [x] Create and use named volumes
-- [ ] Use bind mounts
+- [x] Use bind mounts
 - [x] Create custom networks and connect containers
-- [x] Write a `docker-compose.yml` for a multi-container app
-- [x] Use environment variables and `.env` files in Compose
+- [x] Write a docker-compose.yml for a multi-container app
+- [x] Use environment variables and .env files in Compose
 - [x] Write a multi-stage Dockerfile
 - [x] Push an image to Docker Hub
-- [x] Use `healthcheck` and `depends_on`
+- [x] Use healthchecks and depends_on
 
----
+*Self-Check Verdict:* **100% Confident**. (I executed all of these end-to-end while deploying the Nexus Prime dashboard).
 
-# ⚡ Quick-Fire Docker Questions
+## 2. Quick-Fire Questions (From Real Experience)
 
-## 1. What is the difference between an image and a container?
+**1. What is the difference between an image and a container?**
+- An image is an immutable blueprint built from read-only filesystem layers (like the heavy 1.8GB Node image I built). A container is the actual live, isolated Linux process running that blueprint with a thin read/write layer on top.
 
-A Docker **image** is a blueprint or template that contains the application, dependencies, libraries, and configuration required to run an application.
+**2. What happens to data inside a container when you remove it?**
+- It is permanently destroyed. I experienced this firsthand on Day 32: I created a `demo` table in a Postgres container, ran `docker rm -f`, and spun up a new one. My query through `ERROR: relation "demo" does not exist`. Data must be backed by Volumes to survive!
 
-A Docker **container** is a running instance of that image.
+**3. How do two containers on the same custom network communicate?**
+- They talk seamlessly using Docker's embedded DNS by referencing their container/service names. Docker features an embedded DNS server that automatically translates container names into their private IP addresses. I proved this when the default bridge threw a `ping: bad address` error, but pinging `my-container2` worked instantly with 0% packet loss on my custom `my-app-net`.
 
-We can create multiple containers from the same image, and each container runs independently.
+**4. What does `docker compose down -v` do differently from `docker compose down`?**
+- A standard `down` only removes the containers and networks, keeping your data safe. Adding the `-v` flag violently destroys your persistent named volumes too. The critical difference is that docker compose down -v deletes your persistent data volumes, whereas docker compose down leaves your data completely untouched. I used `-v` specifically when my EC2 EBS volume was choked and I needed to deep clean my server.
 
-Example:
+**5. Why are multi-stage builds useful?**
+- Multi-stage builds allow you to create drastically **smaller, more secure, and production-ready Docker images** using a single Dockerfile (via multiple `FROM` statements). 
 
-```
-Docker Image  →  Docker Container
+Here is exactly why they are so valuable:
+* **Drastically Smaller Image Sizes:** Instead of baking heavy build tools and compilers into the final image, you compile the app in Stage 1 and copy *only the final executable* into a completely clean, lightweight Stage 2 (like `alpine`). (e.g., A Go app drops from 800MB to just 15MB).
+* **Enhanced Security:** Every build tool left in an image increases its attack surface. By leaving those tools behind in the build stage, your final runtime image contains only what is absolutely necessary, significantly lowering vulnerability risks.
+* **Separation of Concerns:** You can logically organize tasks into distinct stages (e.g., Stage 1: Build -> Stage 2: Test -> Stage 3: Production).
 
-nginx image   →  Running nginx container
-```
+**Quick Comparison: Before vs. After**
+| Feature | Traditional Build | Multi-Stage Build |
+| :--- | :--- | :--- |
+| **Dockerfile Count** | Often required multiple files (`Dockerfile.dev`, `Dockerfile.prod`) | **One** single, easy-to-read Dockerfile |
+| **Final Image Size** | Large (includes build tools, caches, and source code) | **Minimal** (includes only compiled binaries/assets) |
+| **Security Risk** | Higher (larger attack surface, more packages) | **Lower** (only runtime dependencies are present) |
 
----
+**6. What is the difference between COPY and ADD?**
+- `COPY` strictly copies files/directories from the host into the container. `ADD` does the same but can also extract `.tar` archives and download from URLs. Best practice is to stick to `COPY` for predictable builds, which I used consistently in my Dockerfiles.
 
-## 2. What happens to data inside a container when you remove it?
+**7. What does `-p 8080:80` mean?**
+- The flag `-p 8080:80` tells Docker to forward traffic from a specific port on your host machine to a port inside the container. This process is called **port mapping** or **port publishing**.
 
-Containers are **ephemeral**, which means their data is temporary.
+Here is the exact breakdown of how it works:
+* **`-p` (or `--publish`)**: This tells Docker that you want to open a network port so outside traffic can reach the container.
+* **`8080` (Host Port)**: The port on your *actual computer* (host machine) that you will connect to in your browser or app (e.g., `http://localhost:8080`).
+* **`80` (Container Port)**: The port that the application inside the Docker container is actively *listening on* (usually the default port for web servers like Nginx or Apache).
 
-When a container is removed:
+When a request is made, it follows this exact path:
+`Your Browser ──> Host Machine (Port 8080) ──> Docker Bridge ──> Container (Port 80)`
 
-- Data stored inside the container writable layer is deleted.
-- Data remains only if it is stored using:
-  - Docker volumes
-  - Bind mounts
-
-Example:
-
-```
-Container removed ❌
-Data inside container ❌
-
-Volume data ✅
-Bind mount data ✅
-```
-
----
-
-## 3. How do two containers on the same custom network communicate?
-
-Two containers connected to the same custom Docker network communicate using **container names as DNS names**.
-
-Docker provides built-in DNS resolution inside custom networks, allowing containers to communicate without using IP addresses.
-
-Example:
-
-```
-Backend Container
-        |
-        |
-        ↓
-mongodb://database:27017
-        |
-        |
-Database Container
-```
-
-Here:
-
-```
-database = container name
-```
-
----
-
-## 4. What does `docker compose down -v` do differently from `docker compose down`?
-
-### `docker compose down`
-
-Removes:
-
-- Containers
-- Networks
-
-Keeps:
-
-- Volumes
-
----
-
-### `docker compose down -v`
-
-Removes:
-
-- Containers
-- Networks
-- Volumes
-
-The `-v` flag deletes named volumes, which means persistent data stored inside those volumes will also be removed.
-
----
-
-## 5. Why are multi-stage builds useful?
-
-Multi-stage builds help:
-
-- Reduce Docker image size
-- Improve security
-- Remove unnecessary build dependencies
-
-The build process is separated into multiple stages:
-
-1. Build stage:
-   - Installs dependencies
-   - Compiles application
-   - Creates build artifacts
-
-2. Runtime stage:
-   - Copies only required files
-   - Runs the application
-
-Benefits:
-
-- Smaller images
-- Fewer packages
-- Reduced attack surface
-
----
-
-## 6. What is the difference between `COPY` and `ADD`?
-
-### COPY
-
-Used to copy files and directories from the build context into the Docker image.
-
-Example:
-
-```dockerfile
-COPY package.json /app/
-```
-
-### ADD
-
-Has the same functionality as COPY but provides additional features:
-
-- Extract compressed archives
-- Download files from URLs
-
-Example:
-
-```dockerfile
-ADD app.tar.gz /app/
-```
-
-Docker recommends using **COPY** unless you specifically need ADD features.
-
----
-
-## 7. What does `-p 8080:80` mean?
-
-Port mapping syntax:
-
-```bash
--p host_port:container_port
-```
-
-Example:
-
-```bash
-docker run -p 8080:80 nginx
-```
-
-Meaning:
-
-```
-Host Machine Port 8080
-          |
-          ↓
-Container Port 80
-```
-
-It allows users to access the application running inside the container through the host machine.
-
----
-
-## 8. How do you check how much disk space Docker is using?
-
-Use:
-
-```bash
-docker system df
-```
-
-It shows disk usage for:
-
-- Images
-- Containers
-- Volumes
-- Build cache
-
-For detailed information:
-
-```bash
-docker system df -v
-```
-
----
-
-# 📚 Docker Documentation
-
-Docker commands and Dockerfile instructions:
-
-➡️ [View Docker Cheat Sheet & Dockerfile Instructions](./docker-cheatsheet.md)
-
----
-
-# 🔁 Revisit Weak Spots
-
-## 1. Explain CMD vs ENTRYPOINT
-
-Both `CMD` and `ENTRYPOINT` define what command runs when a container starts.
-
-### Simple Difference:
-
-| Instruction | Purpose |
-|---|---|
-| `CMD` | Default command (can be overridden) |
-| `ENTRYPOINT` | Main command (usually fixed) |
-
-Example:
-
-```dockerfile
-FROM ubuntu
-
-ENTRYPOINT ["echo"]
-
-CMD ["Hello Docker"]
-```
-
-Run:
-
-```bash
-docker run image_name
-```
-
-Output:
-
-```
-Hello Docker
-```
-
-Run:
-
-```bash
-docker run image_name DevOps
-```
-
-Output:
-
-```
-DevOps
-```
-
-Here:
-
-```
-ENTRYPOINT → echo
-CMD        → Default argument
-```
-
----
-
-## 2. Use Bind Mounts
-
-A **bind mount** maps a file or directory from the host machine directly into a container.
-
-It is commonly used for:
-
-- Development environments
-- Sharing source code
-- Testing changes without rebuilding images
-
-### Syntax:
-
-```bash
-docker run -v <host-path>:<container-path> <image>
-```
-
-Example:
-
-```bash
-docker run -v /home/user/project:/app node-app
-```
-
-Mapping:
-
-```
-Host Machine              Container
-
-/home/user/project  --->  /app
-```
-
-Changes made on the host are immediately available inside the container.
-
----
-
-# 🎯 Day 37 Summary
-
-Topics revised:
-
-✅ Docker images and containers  
-✅ Container lifecycle  
-✅ Docker networking  
-✅ Docker volumes  
-✅ Docker Compose  
-✅ Multi-stage builds  
-✅ Dockerfile instructions  
-✅ CMD vs ENTRYPOINT  
-✅ Bind mounts  
-✅ Docker troubleshooting commands  
+**8. How do you check how much disk space Docker is using?**
+- By running `docker system df` to see a high-level summary of the space used by images, containers, local volumes, and the build cache. For a deeper, itemized breakdown showing exactly which specific container or image is consuming space, we append the verbose flag: `docker system df -v`.
