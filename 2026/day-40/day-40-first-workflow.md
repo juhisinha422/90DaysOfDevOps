@@ -32,7 +32,7 @@ Below is the initial configuration designed to verify runner allocation and basi
 **Verification:**
 The pipeline was triggered automatically on push. GitHub provisioned an `ubuntu-latest` runner, checked out the code, and successfully executed the bash command.
 
-![Green Pipeline Run](./task-02-green-run.png)
+<img width="2940" height="1848" alt="Image" src="https://github.com/user-attachments/assets/1361a402-b50c-4618-abe9-347c6f7e61d9" />
 
 ---
 
@@ -57,7 +57,7 @@ Pipelines must react to the context of the code being pushed. By injecting addit
 *   Running `ls -la` proved that the `actions/checkout` step successfully pulled the remote code into the runner's isolated workspace.
 *   Using `${{ runner.os }}` verified the underlying operating system.
 
-![Expanded Logs](./task-04-expanded-logs.png)
+<img width="2932" height="1670" alt="Image" src="https://github.com/user-attachments/assets/7c7c7805-5165-4f63-a6c0-7c2866cb446b" />
 
 ---
 
@@ -69,4 +69,4 @@ In real-world CI/CD, pipelines act as quality gates. To understand failure state
 2.  **UI Feedback:** The GitHub Actions tab marked the run with a Red Cross (❌). If this were a Pull Request, branch protection rules would automatically block the code from being merged into `main`.
 3.  **Debugging:** By clicking into the failed step, the logs explicitly highlighted the exact line where the shell failed, making remediation straightforward.
 
-![Pipeline Failure Analysis](./task-05-failure.png)
+<img width="2940" height="1846" alt="Image" src="https://github.com/user-attachments/assets/73456976-0cb2-4181-bc3c-1163fe454b9c" />
