@@ -7,7 +7,7 @@ Today, I leveled up my CI/CD game by moving from simple "dumb scripts" to **Smar
 ## Task 1: Multi-Job Workflow (Dependency Chain)
 Created a workflow with three jobs (`build`, `test`, `deploy`). I used the `needs` keyword to ensure strict execution order. If `build` fails, `test` won't run. If `test` fails, `deploy` is blocked.
 
-<img width="2940" height="1848" alt="Image" src="https://github.com/user-attachments/assets/194a69e9-6938-43ca-88c8-d19daca88c09" />
+<img width="2048" height="1287" alt="Image" src="https://github.com/user-attachments/assets/84b03d3f-fa17-4b2c-9526-2e2d79580434" />
 
 ---
 
