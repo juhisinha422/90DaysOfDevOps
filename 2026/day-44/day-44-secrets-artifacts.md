@@ -19,7 +19,7 @@ I created a repository secret named `MY_SECRET_MESSAGE` and wrote a workflow to 
 Instead of printing directly, I mapped the secret to an environment variable (`MY_ENV_SECRET`) within the step. I also added `DOCKER_USERNAME` and `DOCKER_TOKEN` as secrets to the repository for future use.
 
 *Proof of securely loading secrets via Environment Variables:*
-![Task 2 Env Secrets](task-2-env-secrets.png)
+<img width="2940" height="1846" alt="Image" src="https://github.com/user-attachments/assets/d8cf2e62-42ed-4219-8636-b7684808301e" />
 
 ---
 
@@ -29,7 +29,7 @@ I created a step that generates a `test-report.txt` file and used `actions/uploa
 **Verification:** Yes, after the workflow ran, the `daily-test-report` artifact was successfully generated, visible, and downloadable as a `.zip` file from the Actions summary tab.
 
 *Proof of Artifact available for download in GitHub Actions:*
-![Task 3 Upload Artifact](task-3-upload-artifact.png)
+<img width="2940" height="1846" alt="Image" src="https://github.com/user-attachments/assets/491c99b5-3d85-4459-8ed4-65122d66a1bc" />
 
 ---
 
@@ -42,7 +42,7 @@ I created a multi-job workflow where `Job 1` generates a file and uploads it, an
 2. Saving test reports, code coverage, or error logs so developers can download and analyze them after the pipeline finishes.
 
 *Proof of Job 2 successfully downloading and reading the artifact from Job 1:*
-![Task 4 Download Artifact](task-4-download-artifact.png)
+<img width="2940" height="1850" alt="Image" src="https://github.com/user-attachments/assets/d389fbc9-035f-4e2f-83c5-e68902172ca5" />
 
 ---
 
@@ -52,10 +52,10 @@ I added a Python unit test (`tests/math_operations.py`) to the repository and cr
 I intentionally broke the logic to ensure the pipeline goes **Red (Failed)**, then fixed the logic to verify the pipeline goes **Green (Passed)**.
 
 *Proof of failing test run (Pipeline breaks as expected):*
-![Task 5a Test Fail](task-5a-test-fail.png)
+<img width="2940" height="1554" alt="Image" src="https://github.com/user-attachments/assets/4351332a-f796-4e66-85b4-6ca6d52f48e5" />
 
 *Proof of passing test run (Pipeline fixed and green):*
-![Task 5b Test Pass](task-5b-test-pass.png)
+<img width="2940" height="1614" alt="Image" src="https://github.com/user-attachments/assets/2c60f00a-ed93-4b85-9037-cc891b519371" />
 
 ---
 
@@ -66,4 +66,4 @@ I implemented `actions/cache@v4` to simulate caching dependencies. I ran it twic
 - **Answer:** Specific directories (like `node_modules` for Node.js or `~/.cache/pip` for Python) are zipped and cached. These files are stored securely on GitHub's internal cloud storage infrastructure. They are linked to a unique cache `key`, and if the key matches in future runs, GitHub restores the files directly to the runner VM, bypassing the internet download and saving time.
 
 *Proof of Caching execution in the workflow:*
-![Task 6 Caching](task-6-caching.png)
+<img width="2940" height="1850" alt="Image" src="https://github.com/user-attachments/assets/9c4b00d3-553f-4b68-971f-fc108cb062e4" />
