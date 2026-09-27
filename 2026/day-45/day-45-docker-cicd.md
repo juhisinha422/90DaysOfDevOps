@@ -3,7 +3,7 @@
 ## Task 1: Prepare
 Verified the Python Flask e-commerce application and the minimalistic production Dockerfile. Configured GitHub repository secrets `DOCKER_USERNAME` and `DOCKER_TOKEN` for Docker Hub authentication.
 
-![Task 1 - Prepare]<img width="2940" height="1208" alt="Image" src="https://github.com/user-attachments/assets/21f862b5-4be8-48bf-a86d-75699191a700" />
+[Task 1 - Prepare]<img width="2940" height="1208" alt="Image" src="https://github.com/user-attachments/assets/21f862b5-4be8-48bf-a86d-75699191a700" />
 
 ## Task 2: Build the Docker Image in CI
 Created the `.github/workflows/docker-publish.yml` to trigger on pushes to the `main` branch. The workflow checks out the code, sets up Docker Buildx, and builds the container image.
