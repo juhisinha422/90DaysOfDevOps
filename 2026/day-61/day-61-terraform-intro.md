@@ -1,110 +1,84 @@
-%-------------------------
-% ATS-friendly resume: single column, no tables, no icons, no images
-% Compile with pdfLaTeX (Overleaf default)
-%-------------------------
-\documentclass[10.5pt,letterpaper]{article}
+# Day 61: Introduction to Terraform and Your First AWS Infrastructure
 
-\usepackage[T1]{fontenc}
-\usepackage[utf8]{inputenc}
-\usepackage{lmodern}
-\usepackage[margin=0.7in]{geometry}
-\usepackage{enumitem}
-\usepackage[hidelinks]{hyperref}
-\usepackage{titlesec}
-\usepackage{xcolor}
+## Challenge Tasks
 
-% Make text extractable / ATS-parsable
-\input{glyphtounicode}
-\pdfgentounicode=1
+### Task 1: Understand Infrastructure as Code
+**1. What is Infrastructure as Code (IaC)? Why does it matter in DevOps?**
+Infrastructure as Code (IaC) is the process of managing and provisioning computing infrastructure through machine-readable definition files, rather than interactive configuration tools or physical hardware setup. In DevOps, it matters because it enables automation, infrastructure version control, consistency across environments, and faster deployment cycles.
 
-\pagestyle{empty}
-\setlength{\parindent}{0pt}
-\setlength{\parskip}{0pt}
-\raggedbottom
+**2. What problems does IaC solve compared to manually creating resources in the AWS console?**
+Manual creation (ClickOps) leads to human errors, configuration drift (inconsistencies between staging and production), and lack of auditability. IaC solves this by providing a single source of truth, enabling automated testing, and allowing teams to reliably recreate environments in minutes.
 
-% Section style: plain text heading with a rule
-\titleformat{\section}{\large\bfseries\scshape}{}{0em}{}[\titlerule]
-\titlespacing*{\section}{0pt}{9pt}{5pt}
+**3. How is Terraform different from AWS CloudFormation, Ansible, and Pulumi?**
+- **CloudFormation:** Strictly tied to AWS, whereas Terraform is cloud-agnostic.
+- **Ansible:** Primarily a configuration management tool (configuring OS/software inside a server), whereas Terraform is an infrastructure provisioning tool (creating the server itself).
+- **Pulumi:** Uses general-purpose programming languages (Python, Go), whereas Terraform uses its own declarative HashiCorp Configuration Language (HCL).
 
-% Bullet style
-\setlist[itemize]{leftmargin=0.2in, itemsep=1.5pt, topsep=2pt, parsep=0pt}
+**4. What does it mean that Terraform is "declarative" and "cloud-agnostic"?**
+- **Declarative:** You define the desired end-state of your infrastructure, and Terraform determines the logic and steps to achieve it.
+- **Cloud-Agnostic:** Using a unified workflow, Terraform can manage resources across multiple cloud providers (AWS, Azure, GCP) via different provider plugins.
 
-% Helper: role line  (title | dates) then (company | location)
-\newcommand{\roleheader}[4]{%
-  \textbf{#1} \hfill #2\\
-  \textit{#3} \hfill \textit{#4}\vspace{2pt}
-}
+### Task 2: Install Terraform and Configure AWS
+- **Terraform Installation:** Installed latest Terraform via Homebrew on macOS (`v1.15.x`).
+- **AWS CLI:** Installed AWS CLI v2 via package installer and configured IAM User credentials (`terraform-admin`) for the `ap-south-1` region.
+- Verified connection using `aws sts get-caller-identity`.
 
-\begin{document}
+### Task 3: Your First Terraform Config -- Create an S3 Bucket
+Created `main.tf` and defined the AWS provider and an `aws_s3_bucket` resource.
+- **Bucket Name:** `terraweek-rashid-khan-2026-unique-bucket`
+- **Commands Executed:** `terraform init`, `terraform plan`, `terraform apply`
 
-%---------- HEADER ----------
-\begin{center}
-  {\LARGE \textbf{Juhi Sinha}}\\[3pt]
-  DevOps Engineer | AWS Certified DevOps Engineer -- Professional\\[2pt]
-  Bengaluru, Karnataka, India | +91 8120377675 | juhisinha099@gmail.com\\[2pt]
-  \href{https://linkedin.com/in/juhi-sinha-2aa280176}{linkedin.com/in/juhi-sinha-2aa280176} | \href{https://github.com/juhisinha422}{github.com/juhisinha422}
-\end{center}
+**Q: What did terraform init download? What does the .terraform/ directory contain?**
+**Answer:** The `terraform init` command downloaded the AWS provider plugin (specifically `hashicorp/aws v5.100.0`) required to interact with AWS APIs. The `.terraform/` directory contains these downloaded provider binaries and modules, acting as a local cache for the project.
 
-%---------- SUMMARY ----------
-\section{Professional Summary}
-AWS Certified DevOps Engineer -- Professional with 4+ years of experience in Environment Management and DevOps, building and operating secure, scalable AWS infrastructure across Dev, UAT, Pre-Prod, and Production. Hands-on with Terraform and CloudFormation (Infrastructure as Code), Docker, Kubernetes (Amazon EKS), CI/CD pipelines (Jenkins, YAML pipelines), and Linux administration. Strong in networking and cloud security fundamentals, incident management, root cause analysis, automation (Bash, Python), and observability (Prometheus, Grafana, ELK), sustaining 99.9\% platform availability in enterprise-scale environments.
+### Task 4: Add an EC2 Instance
+Added an `aws_instance` block to `main.tf`.
+- **AMI:** `ami-0f5ee92e2d63afc18` (Amazon Linux 2)
+- **Instance Type:** `t2.micro`
+- **Tag:** `Name = "TerraWeek-Day1"`
 
-%---------- SKILLS ----------
-\section{Technical Skills}
-\textbf{Cloud (AWS):} EC2, S3, RDS, IAM, VPC, EKS, ECS, Lambda, Load Balancers\\
-\textbf{Infrastructure as Code:} Terraform, AWS CloudFormation\\
-\textbf{Containers \& Orchestration:} Docker, Kubernetes, Amazon EKS, ECS, Helm\\
-\textbf{CI/CD:} Jenkins, AWS DevOps, YAML Pipelines, Trunk-Based Deployment, Nexus\\
-\textbf{Linux \& Networking:} Linux Administration and Troubleshooting, VPC Peering, Bastion Hosts, NAT Gateway, Load Balancers, NSGs, Firewalls\\
-\textbf{Security:} IAM, Secure Configuration, Network Security, SonarQube\\
-\textbf{Monitoring \& Observability:} Prometheus, Grafana, ELK Stack, Alerting\\
-\textbf{Automation \& Scripting:} Bash/Shell Scripting, Python\\
-\textbf{Version Control:} Git, GitHub\\
-\textbf{Practices:} Environment Management, Incident Management, Root Cause Analysis, Agile
+**Q: How does Terraform know the S3 bucket already exists and only the EC2 instance needs to be created?**
+**Answer:** Terraform tracks the real-world infrastructure in its state file (`terraform.tfstate`). During `terraform plan`, it compared the local code against this state file and the actual AWS environment. It recognized the S3 bucket was already present in the state and unmodified in the code, so it only planned the creation of the newly added EC2 instance.
 
-%---------- EXPERIENCE ----------
-\section{Work Experience}
+### Task 5: Understand the State File
+Inspected the state file using CLI commands: `terraform show`, `terraform state list`, and `terraform state show`.
 
-\roleheader{DevOps Engineer}{Feb 2022 -- Present}{Tata Consultancy Services (TCS)}{India}
-\begin{itemize}
-  \item Managed Dev, UAT, Pre-Prod, and Production environments on AWS, ensuring consistent, repeatable, and secure environment delivery.
-  \item Automated AWS infrastructure provisioning using Terraform modules integrated into CI/CD workflows, reducing environment setup time by 60\%.
-  \item Designed trunk-based CI/CD pipelines in YAML across all environments, increasing deployment frequency by 40\%.
-  \item Orchestrated 10+ containerized workloads on Amazon EKS using Kubernetes manifests with auto-scaling, rolling updates, and health checks, improving resource utilization by 45\%.
-  \item Containerized applications using Docker multi-stage builds, reducing image size by 40\% and speeding up container startup and rollouts.
-  \item Automated 15+ operational workflows using Bash/Shell scripting and Terraform, cutting manual effort by 50\% and improving operational reliability.
-  \item Built 20+ Grafana dashboards and Prometheus alerting rules for proactive issue detection, supporting 99.9\% platform availability.
-  \item Led incident management, recovery, and root cause analysis, implementing preventive fixes to improve platform reliability and reduce repeat incidents.
-  \item Administered and troubleshot Linux-based systems and core AWS services (EC2, S3, RDS, VPC, IAM, Lambda).
-  \item Designed secure cloud networking using VPC Peering, Bastion Hosts, NAT Gateways, and Load Balancers, reducing security risk by 70\%.
-  \item Administered 10+ microservice repositories on Git/GitHub with branch policies and code review practices, reducing merge conflicts by 30\%.
-  \item Collaborated with Software Engineering, Cloud, and IT Operations teams in an agile setup to improve operational readiness, observability, and security across enterprise-scale cloud environments.
-\end{itemize}
+**1. What information does the state file store about each resource?**
+It stores a complete map of the resources deployed, including metadata, unique cloud identifiers (like the EC2 Instance ID `i-0f47a1c3aa7951a19`), private/public IP addresses, and resource dependencies.
 
-\vspace{4pt}
-\roleheader{Cloud Support Engineer}{Aug 2021 -- Jan 2022}{Tata Consultancy Services (TCS)}{India}
-\begin{itemize}
-  \item Provided Level 1 and Level 2 support for AWS-based cloud infrastructure.
-  \item Managed and monitored virtual machines, storage, and network security groups (NSGs).
-  \item Performed root cause analysis for incidents and implemented preventive solutions.
-\end{itemize}
+**2. Why should you never manually edit the state file?**
+The state file is a strictly formatted JSON file. Manually editing it can corrupt the JSON structure or break the synchronization between Terraform and AWS, causing Terraform to lose track of resources, create duplicates, or fail execution.
 
-%---------- CERTIFICATIONS ----------
-\section{Certifications}
-\begin{itemize}
-  \item AWS Certified DevOps Engineer -- Professional, Amazon Web Services
-\end{itemize}
+**3. Why should the state file not be committed to Git?**
+The state file stores infrastructure data in plain text, which can include highly sensitive information like database passwords, API tokens, and private keys. Committing this to a Git repository exposes your cloud environment to severe security risks.
 
-%---------- ACHIEVEMENTS ----------
-\section{Achievements}
-\begin{itemize}
-  \item Best Performer Award, InvestIndia-NSWS (National Single Window System) Project
-  \item On-The-Spot Award for swift action and effective solutions, InvestIndia-NSWS Project
-\end{itemize}
+### Task 6: Modify, Plan, and Destroy
+Modified the EC2 instance tag from `TerraWeek-Day1` to `TerraWeek-Modified`.
 
-%---------- EDUCATION ----------
-\section{Education}
-\textbf{B.Tech, Computer Science} \hfill 2017 -- 2021\\
-Bansal Institute of Science \& Technology, Bhopal, Madhya Pradesh
+**Q: What do the ~, +, and - symbols mean in terraform plan?**
+- `+` means Create (resource will be added).
+- `-` means Destroy (resource will be removed).
+- `~` means Update in-place (resource properties will be modified without recreation).
+- `-/+` means Replace (resource will be destroyed and recreated).
 
-\end{document}
+**Q: Is this an in-place update or a destroy-and-recreate?**
+**Answer:** Because only a tag was changed, it was an **in-place update** (`~`).
+
+Finally, executed `terraform destroy` to tear down all resources safely.
+
+---
+
+## Documentation Summary
+
+- **IaC Explanation:** Infrastructure as Code (IaC) replaces manual configuration with machine-readable definition files. It allows developers to version-control infrastructure, automate deployments, and eliminate configuration drift, providing a consistent, auditable, and scalable cloud environment.
+- **Execution Screenshots:**
+  - [Insert Screenshot: `terraform apply` creating S3 and EC2]
+  - [Insert Screenshot: S3 and EC2 visible in AWS Console]
+- **Command Reference:**
+  - `terraform init`: Initializes the directory and downloads providers.
+  - `terraform plan`: Shows the execution plan of changes to be made.
+  - `terraform apply`: Applies the changes to reach the desired state.
+  - `terraform destroy`: Deletes all managed infrastructure.
+  - `terraform show`: Displays a human-readable view of the current state.
+  - `terraform state list`: Lists all resources currently tracked by Terraform.
+- **State File Importance:** The state file maps the configuration to the real world. It optimizes performance by preventing unnecessary API calls and tracks dependencies, but must be secured remotely (not in Git) to protect sensitive data.
