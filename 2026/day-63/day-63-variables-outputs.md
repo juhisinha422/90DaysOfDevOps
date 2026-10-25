@@ -110,7 +110,7 @@ instance_type = var.environment == "prod" ? "t3.small" : "t2.micro"
 **Screenshots:**
 - `task-05-conditional.png` (Plan output showing dynamic instance type change).
 - `task-05-destroy.png` (Successful reverse-order teardown of the infrastructure).
-<img width="2940" height="1850" alt="Image" src="https://github.com/user-attachments/assets/3ed2d228-6464-4f4b-b9a8-c13efd1f9f0d" />![Task-05b](./task-05-destroy.png)
+<img width="2940" height="1850" alt="Image" src="https://github.com/user-attachments/assets/3ed2d228-6464-4f4b-b9a8-c13efd1f9f0d" />
 
 <img width="2940" height="1848" alt="Image" src="https://github.com/user-attachments/assets/b74e0cc1-5e82-4aa6-a795-0e84f3989971" />
 ---
