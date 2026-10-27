@@ -14,7 +14,7 @@ Applied the existing AWS networking and compute configuration and inspected the 
 
 **Screenshots:**
 -<img width="2940" height="1850" alt="Image" src="https://github.com/user-attachments/assets/1b63513a-9892-4089-966a-92780347bffd" /> (List of 11 tracked resources)
-- ![task-01-state-show.png](./task-01-state-show.png) (Deep dive into the EC2 instance attributes)
+-<img width="2940" height="1848" alt="Image" src="https://github.com/user-attachments/assets/477684ff-6592-4005-9fa7-ef4dca199379" / (Deep dive into the EC2 instance attributes)
 
 ## Task 2: Set Up S3 Remote Backend
 
