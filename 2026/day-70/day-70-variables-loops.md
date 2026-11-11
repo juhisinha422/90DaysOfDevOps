@@ -4,7 +4,7 @@
 Created a playbook using inline variables to define application details (app_name, app_port). We verified that Ansible's variable precedence allows command-line variables (-e or --extra-vars) to strictly override playbook variables.
 
 **Proof of Work:**
-![Task 1 CLI Override](./screenshots/task-1-variables-override.png)
+<img width="2940" height="1848" alt="image" src="https://github.com/user-attachments/assets/0258d4d7-1026-48b8-a171-cb28e5622d6a" />
 
 ---
 
@@ -26,7 +26,7 @@ ansible-practice/
 The group_vars/web.yml defined max_connections: 1000, but host_vars/web-server.yml defined max_connections: 2000. Upon execution, the host variable successfully overrode the group variable, confirming that specific scopes override broader scopes.
 
 **Proof of Work:**
-![Task 2 Variable Precedence](./screenshots/task-2-variable-precedence.png)
+<img width="2940" height="1850" alt="image" src="https://github.com/user-attachments/assets/f3438fbc-1d77-4647-8d5c-fac84f579b5a" />
 
 ---
 
@@ -40,7 +40,7 @@ Here are 5 critical facts used in real-world automation:
 5. ansible_hostname: To automatically generate server configuration files or naming conventions.
 
 **Proof of Work:**
-![Task 3 Ansible Facts](./screenshots/task-3-ansible-facts.png)
+<img width="2940" height="1850" alt="image" src="https://github.com/user-attachments/assets/f97d3185-2582-4407-8dd4-e8fd21205180" />
 
 ---
 
@@ -48,7 +48,7 @@ Here are 5 critical facts used in real-world automation:
 Executed a playbook utilizing the when keyword to enforce boolean logic. The Nginx installation task successfully executed on web-server while correctly reporting a skipped state for the app-server and db-server.
 
 **Proof of Work:**
-![Task 4 Conditionals](./screenshots/task-4-conditionals.png)
+<img width="2930" height="1850" alt="image" src="https://github.com/user-attachments/assets/9a49573e-67a7-4ba8-9623-ca0417e32d21" />
 
 ---
 
@@ -56,7 +56,7 @@ Executed a playbook utilizing the when keyword to enforce boolean logic. The Ngi
 Utilized the loop keyword (the modern replacement for with_items) to execute bulk operations dynamically. A single YAML block successfully iterated over a list to create multiple users, deploy multiple directory structures, and install an array of packages.
 
 **Proof of Work:**
-![Task 5 Loops](./screenshots/task-5-loops.png)
+<img width="2940" height="1844" alt="image" src="https://github.com/user-attachments/assets/bd0cda2b-c46e-465f-9a9e-441ee03a82c9" />
 
 ---
 
@@ -64,4 +64,4 @@ Utilized the loop keyword (the modern replacement for with_items) to execute bul
 Engineered a complex playbook utilizing the register keyword to capture standard outputs from shell commands (df -h, free -m). We synthesized this registered data with Ansible Facts to generate a dynamically formatted Server Health Report, and copied it directly to the target node's /tmp directory.
 
 **Proof of Work (Final Report Readout):**
-![Task 6 Server Report](./screenshots/task-6-server-report.png)
+<img width="2940" height="1846" alt="image" src="https://github.com/user-attachments/assets/657b40e9-bb2a-4054-94ce-ea63307f7f7e" />
